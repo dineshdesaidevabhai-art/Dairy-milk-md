@@ -1,36 +1,275 @@
-# This is a basic workflow to help you get started with Actions
+<!doctype html>
+<html lang="gu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>રામાધાણી ડેરી ફાર્મ</title>
+  <style>
+    :root{--bg:#f4eadf;--panel:#fff8f1;--card:#fbf3ea;--text:#24170f;--muted:#7d5b47;--line:#e6d6c5;--accent:#8b5e34;--accent2:#b57a46;--shadow:0 14px 34px rgba(76,44,21,.10)}
+    [data-theme='dark']{--bg:#120b08;--panel:#1c120d;--card:#21150f;--text:#f3e7db;--muted:#c4ab96;--line:#3b2a20;--accent:#d2a679;--accent2:#a86f43;--shadow:0 14px 34px rgba(0,0,0,.35)}
+    *{box-sizing:border-box} html,body{margin:0;height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);transition:.25s}
+    .app{max-width:1440px;margin:0 auto;padding:16px}
+    .topbar,.panel,.card,.ledger,.helpbox{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;position:sticky;top:10px;z-index:20;backdrop-filter:blur(10px)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-weight:800}
+    h1,h2,h3,p{margin:0}
+    .muted{color:var(--muted)}
+    .btn{border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));padding:11px 14px;border-radius:12px;font-weight:700}
+    .btn-sm{padding: 6px 12px; font-size: 13px; border-radius: 8px;}
+    .marquee{overflow:hidden;white-space:nowrap;padding:12px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);color:var(--accent);font-weight:700;margin:14px 0}
+    .marquee span{display:inline-block;padding-left:100%;animation:mar 18s linear infinite}
+    @keyframes mar{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+    .grid{display:grid;grid-template-columns:300px 1fr;gap:16px}
+    .sidebar,.main{min-width:0}
+    .sidebar{padding:16px}
+    .main{display:grid;gap:16px}
+    .loginbox,.stack{display:grid;gap:10px}
+    input,select{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--text)}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .kpi{padding:14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(255,255,255,.03))}
+    .customers{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .customer{padding:14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03); cursor:pointer;}
+    .customer:hover{border-color:var(--accent2)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+    th{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+    .hidden{display:none}
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .modal{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:grid; place-items:center; z-index:1000; backdrop-filter:blur(5px);}
+    @media(max-width:980px){.grid,.kpis{grid-template-columns:1fr}.topbar{position:static}}
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">RD</div>
+        <div>
+          <h2>રામાધાણી ડેરી ફાર્મ</h2>
+          <div class="muted">પ્રીમિયમ ડેરી મેનેજમેન્ટ ડેશબોર્ડ</div>
+        </div>
+      </div>
+      <div class="row">
+        <span class="pill" id="themeLabel">રાત્રી મોડ</span>
+        <button class="btn" onclick="toggleTheme()">થીમ બદલો</button>
+      </div>
+    </div>
 
-name: CI
+    <div class="marquee">
+      <span>શુદ્ધ દૂધ, શુદ્ધ સ્વાસ્થ્ય - રામાધણી ડેરી • શુદ્ધ દૂધ, શુદ્ધ સ્વાસ્થ્ય - રામાધણી ડેરી</span>
+    </div>
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    <div class="grid">
+      <!-- SIDEBAR -->
+      <aside class="sidebar panel">
+        <div id="authBox">
+          <h3>માલિક લોગિન</h3>
+          <p class="muted" style="margin:6px 0 10px">સુરક્ષિત માલિક પ્રવેશ.</p>
+          <div class="loginbox">
+            <input id="user" placeholder="યુઝરનેમ" value="owner" />
+            <input id="pass" placeholder="પાસવર્ડ" type="password" value="ramadhani123" />
+            <button class="btn" onclick="login()">લોગિન કરો</button>
+          </div>
+        </div>
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+        <div id="ownerNav" class="hidden" style="margin-top:16px">
+          <h3>માલિક સાધનો</h3>
+          <div class="stack">
+            <button class="btn" onclick="showSection('dashboard')">📊 ડેશબોર્ડ</button>
+            <button class="btn" onclick="showSection('addCustomer')">➕ ગ્રાહક ઉમેરો</button>
+            <button class="btn" onclick="logout()">લોગઆઉટ</button>
+          </div>
+        </div>
+      </aside>
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+      <!-- MAIN CONTENT -->
+      <main class="main">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="panel hidden">
+          <div class="kpis">
+            <div class="kpi"><h3>ગ્રાહકો</h3><p id="k1" style="font-size:26px;margin-top:8px">0</p></div>
+            <div class="kpi"><h3>આજનું દૂધ</h3><p id="k2" style="font-size:26px;margin-top:8px">0 L</p></div>
+            <div class="kpi"><h3>ભાવ</h3><p style="font-size:26px;margin-top:8px">₹62</p></div>
+            <div class="kpi"><h3>બાકી રકમ</h3><p id="k4" style="font-size:26px;margin-top:8px">₹0</p></div>
+          </div>
+          <div class="card" style="margin-top:12px;padding:16px">
+            <h3>ગ્રાહક યાદી</h3>
+            <p class="muted" style="margin:6px 0 12px">ગ્રાહક પર ક્લિક કરીને દૂધની એન્ટ્રી કરો.</p>
+            <div class="customers" id="customerGrid"></div>
+          </div>
+        </section>
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+        <!-- Add Customer Section -->
+        <section id="addCustomer" class="panel hidden" style="padding:16px">
+          <h3>નવો ગ્રાહક ઉમેરો</h3>
+          <p class="muted" style="margin:6px 0 12px">ગ્રાહકની વિગત ભરો.</p>
+          <div class="stack" style="max-width:400px">
+            <input id="cName" placeholder="ગ્રાહકનું નામ" />
+            <input id="cPhone" placeholder="મોબાઈલ નંબર (+91 સાથે)" />
+            <input id="cSociety" placeholder="સોસાયટી/વિસ્તાર" />
+            <button class="btn" onclick="saveCustomer()">ગ્રાહક સેવ કરો</button>
+          </div>
+        </section>
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+        <!-- Customer Detail Section -->
+        <section id="custDetail" class="panel hidden" style="padding:16px">
+          <button class="btn btn-sm" style="background:var(--muted)" onclick="showSection('dashboard')">← પાછા જાઓ</button>
+          <div style="margin-top:16px;" class="two">
+            <div class="card" style="padding:16px">
+              <h2 id="detName"></h2>
+              <p class="muted" id="detMeta"></p>
+              <div style="margin-top:16px;" class="row">
+                <button class="btn" onclick="openMilkModal()">🥛 દૂધ એન્ટ્રી કરો</button>
+                <button class="btn" style="background:#2f855a" onclick="sendWhatsapp()">💬 વૉટ્સએપ મેસેજ</button>
+              </div>
+            </div>
+            <div class="card" style="padding:16px">
+              <h3>મહિનાનો સારાંશ</h3>
+              <p style="font-size:20px; margin-top:8px;">કુલ દૂધ: <b id="detTotalLiters">0</b> L</p>
+              <p style="font-size:20px;">કુલ રકમ: ₹<b id="detTotalAmount">0</b></p>
+            </div>
+          </div>
+          
+          <div class="card" style="margin-top:16px;padding:16px">
+            <h3>દૂધ લેજર</h3>
+            <table>
+              <thead>
+                <tr><th>તારીખ</th><th>શિફ્ટ</th><th>લિટર</th><th>ભાવ</th><th>રકમ</th></tr>
+              </thead>
+              <tbody id="detLedgerBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+  <!-- Milk Entry Modal -->
+  <div id="milkModal" class="modal hidden">
+    <div class="card" style="padding:20px; width:350px;">
+      <h3>દૂધની એન્ટ્રી</h3>
+      <div class="stack" style="margin-top:16px;">
+        <input type="date" id="mDate" />
+        <select id="mShift">
+          <option value="Morning">સવાર (Morning)</option>
+          <option value="Evening">સાંજ (Evening)</option>
+        </select>
+        <input type="number" step="0.1" id="mLiters" placeholder="દૂધ (લિટર)" />
+        <button class="btn" onclick="saveMilkEntry()">એન્ટ્રી સેવ કરો</button>
+        <button class="btn" style="background:var(--muted)" onclick="closeMilkModal()">બંધ કરો</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const rate = 62;
+    let customers = JSON.parse(localStorage.getItem('dairy_customers')) || [];
+    let currentCustId = null;
+    let state = {theme:'dark'};
+
+    function applyTheme(){ document.body.dataset.theme = state.theme; themeLabel.textContent = state.theme === 'dark' ? 'રાત્રી મોડ' : 'દિવસ મોડ'; }
+    function toggleTheme(){ state.theme = state.theme === 'dark' ? 'light' : 'dark'; applyTheme(); }
+
+    function login(){ authBox.classList.add('hidden'); ownerNav.classList.remove('hidden'); showSection('dashboard'); renderApp(); }
+    function logout(){ location.reload(); }
+
+    function showSection(id){ 
+      ['dashboard','addCustomer','custDetail'].forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id)); 
+      if(id==='dashboard') renderApp();
+    }
+
+    // Customer Logic
+    function saveCustomer(){
+      const name = document.getElementById('cName').value;
+      const phone = document.getElementById('cPhone').value;
+      const society = document.getElementById('cSociety').value;
+      if(!name || !phone) return alert('નામ અને ફોન નંબર જરૂરી છે.');
+      
+      const newCust = {
+        id: 'CUST' + Date.now(),
+        name, phone, society,
+        entries: []
+      };
+      customers.push(newCust);
+      localStorage.setItem('dairy_customers', JSON.stringify(customers));
+      alert('ગ્રાહક સફળતાપૂર્વક ઉમેરાયો.');
+      document.getElementById('cName').value = '';
+      document.getElementById('cPhone').value = '';
+      document.getElementById('cSociety').value = '';
+      showSection('dashboard');
+    }
+
+    function renderApp(){
+      document.getElementById('k1').textContent = customers.length;
+      let totalLiters = 0;
+      let totalDue = 0;
+
+      customerGrid.innerHTML = customers.map(c => {
+        const cLiters = c.entries.reduce((sum, e) => sum + Number(e.liters), 0);
+        totalLiters += cLiters;
+        return `
+          <div class="customer" onclick="viewCustomer('${c.id}')">
+            <h3>${c.name}</h3>
+            <p class="muted">${c.society}</p>
+            <p style="margin-top:8px;">કુલ દૂધ: <b>${cLiters} L</b></p>
+            <p>બાકી રકમ: ₹${cLiters * rate}</p>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('k2').textContent = totalLiters + ' L';
+      document.getElementById('k4').textContent = '₹' + (totalLiters * rate);
+    }
+
+    // Detail View Logic
+    function viewCustomer(id){
+      currentCustId = id;
+      const c = customers.find(x => x.id === id);
+      showSection('custDetail');
+      document.getElementById('detName').textContent = c.name;
+      document.getElementById('detMeta').textContent = `${c.society} | 📞 ${c.phone}`;
+      
+      // Render Ledger
+      const totalLiters = c.entries.reduce((sum, e) => sum + Number(e.liters), 0);
+      document.getElementById('detTotalLiters').textContent = totalLiters;
+      document.getElementById('detTotalAmount').textContent = (totalLiters * rate).toFixed(2);
+      
+      detLedgerBody.innerHTML = c.entries.map(e => `
+        <tr><td>${e.date}</td><td>${e.shift}</td><td>${e.liters}</td><td>₹${e.rate}</td><td>₹${(e.liters * e.rate).toFixed(2)}</td></tr>
+      `).join('');
+    }
+
+    // Modal Logic
+    function openMilkModal(){
+      document.getElementById('mDate').valueAsDate = new Date();
+      document.getElementById('milkModal').classList.remove('hidden');
+    }
+    function closeMilkModal(){ document.getElementById('milkModal').classList.remove('hidden'); }
+
+    function saveMilkEntry(){
+      const date = document.getElementById('mDate').value;
+      const shift = document.getElementById('mShift').value;
+      const liters = document.getElementById('mLiters').value;
+      if(!date || !liters) return alert('તારીખ અને લિટર જરૂરી છે.');
+
+      const c = customers.find(x => x.id === currentCustId);
+      c.entries.push({date, shift, liters, rate});
+      localStorage.setItem('dairy_customers', JSON.stringify(customers));
+      closeMilkModal();
+      viewCustomer(currentCustId);
+    }
+
+    function sendWhatsapp(){
+      const c = customers.find(x => x.id === currentCustId);
+      const liters = c.entries.reduce((sum, e) => sum + Number(e.liters), 0);
+      const amt = (liters * rate).toFixed(2);
+      const msg = `નમસ્તે ${c.name}, રામાધાણી ડેરી ફાર્મ તરફથી તમારું આ મહિનાનું બિલ. કુલ દૂધ: ${liters} L, કુલ રકમ: ₹${amt}. આભાર!`;
+      window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    applyTheme();
+  </script>
+</body>
+</html>
